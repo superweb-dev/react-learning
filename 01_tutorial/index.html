@@ -56,7 +56,7 @@
               <h2 className="commentAuthor">
                 {this.props.author}
               </h2>
-              {rawMarkup}
+              <span dangerouslySetInnerHTML={{__html: rawMarkup}} />
             </div>
           );
         }
