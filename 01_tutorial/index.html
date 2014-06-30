@@ -15,17 +15,27 @@
       // The above declaration must remain intact at the top of the script.
       // Your code here
 
-      var someComments = [
-        {author: "Paul Furley", text: "I say, *do* mind your manners."},
-        {author: "Michael Fawkesley", text: "Quite good, quite good."}
-      ];
-
       var CommentBox = React.createClass({
+        getInitialState: function() {
+          return {data: []};
+        },
+        componentWillMount: function() {
+          $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            success: function(data) {
+              this.setState({data: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+              console.error(this.props.url, status, err.toString());
+            }.bind(this)
+          });
+        },
         render: function() {
           return (
             <div className="commentBox">
               <h1>Comments</h1>
-              <CommentList data={this.props.data} />
+              <CommentList data={this.state.data} />
               <CommentForm />
             </div>
           );
@@ -75,7 +85,7 @@
       });
 
       React.renderComponent(
-        <CommentBox data={someComments} />,
+        <CommentBox url="comments.json" />,
         document.getElementById('content')
       );
 
